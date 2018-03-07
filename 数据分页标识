@@ -1,0 +1,36 @@
+    /*
+     * 生成数据分页码
+     * $p           第几页
+     * $count       总记录条数
+     * $listRows    每页条数
+     * $p           当前在第几页
+     */
+    public function page_show($count,$listRows=10,$p=1){
+        if(is_array($count))(
+            $count=reset(reset($count))
+        );
+        $p_all = $count / intval($listRows);
+        for ($i=1;$i< ($p_all+1);$i++){
+            $show[] =$i;  //分页数组
+        }
+        if(count($show) > 5){
+            $result[0]=$show[0]; //首页
+            if($p>5){
+                $result[]=-1;  // ...标记
+            }
+            //echo $p;
+            foreach ($show as $vo){
+                if( abs($p-$vo)<4 ){
+                    $result[]=$vo;
+                }
+            }
+            if(count($show) > 10  && $show[count($show)-5]>$p ){
+                $result[]=-2; //...标记
+            }
+            $result[]=$show[count($show)-1]; //最后一页
+            $result = array_unique($result);//数组去重
+//            dump($result);
+//            die;
+        }
+        return $result;
+    }
